@@ -1,0 +1,99 @@
+import java.util.*;
+
+class BFSTraversal
+{
+  private int V; // No. of vertices
+  HashMap<Integer, List<Integer>> map; //Adjacency List
+  Map<Integer,Boolean> visited;
+// DFS traversal of the vertices reachable from v
+BFSTraversal(SortedSet<Integer> s)
+{
+  this.V = s.size();
+  System.out.println("V= " + V);
+  map = new HashMap<Integer, List<Integer>> ();
+  visited = new HashMap<Integer,Boolean>();
+  Iterator<Integer> it = s.iterator();
+  while(it.hasNext()) {
+  	Integer i = it.next();
+  	visited.put(i, false);
+  	map.put(i, new ArrayList<Integer> ());
+  }
+}
+
+//Utility function to add an edge
+void addEdge(int v, int w)
+{
+	List<Integer> list = map.get(v);
+	list.add(w);
+  map.put(v, list);
+  System.out.println("map= " + map);
+}
+
+
+void BFS(int s)
+{
+LinkedList<Integer> queue = new LinkedList<Integer> ();
+	visited.put(s, true);
+	queue.add(s);
+	while(queue.size()!=0) {
+		s=queue.poll();
+		System.out.print(s+" ");
+		Iterator<Integer> it = map.get(s).iterator();
+		while(it.hasNext()) {
+			Integer i= it.next();
+			if(!visited.get(i)) {
+				visited.put(i, true);
+				queue.add(i);
+			}
+		}
+	} 
+}
+
+
+//Driver code to test above
+public static void main(String [] args)
+{
+	Scanner scan = new Scanner(System.in);
+	int num = Integer.parseInt(scan.nextLine());
+	System.out.println("");
+	System.out.println("num= " + num);
+	int inp[][] = new int[num][3];
+	SortedSet<Integer> node = new TreeSet<Integer> ();
+	for (int i=0; i<num; ++i) {
+		String input= scan.nextLine();
+		String inputs[] = input.split(" ");
+		inp[i][0] = Integer.parseInt(inputs[0]);
+		inp[i][1] = Integer.parseInt(inputs[1]);
+		inp[i][2] = Integer.parseInt(inputs[2]);
+	}
+	System.out.println("");
+	for (int i=0; i<num; ++i) {
+		for (int j=0; j<3; ++j) {
+			System.out.print("inp[" + i + "][" + j + "]=" + inp[i][j] + " ");
+		}
+		System.out.println("");
+	}
+	for (int i=0; i<num; ++i) {
+		node.add(inp[i][0]);
+		if(inp[i][1]!=-1)
+			node.add(inp[i][1]);
+		if(inp[i][2]!=-1)
+			node.add(inp[i][2]);
+		//System.out.println(node);
+	}
+	System.out.println("node= " + node);
+  BFSTraversal g = new BFSTraversal(node);
+  for (int k=0; k<num; ++k) {
+			if(inp[k][1]!=-1)
+				g.addEdge(inp[k][1], inp[k][0]);
+			if(inp[k][2]!=-1)
+				g.addEdge(inp[k][0], inp[k][2]);	
+  }
+  System.out.println("map= " + g.map);
+  System.out.println("BFS Traversal: ");
+ // System.out.println("inp[1][0]=" + inp[1][0]);
+  g.BFS(inp[1][0]);
+  scan.close();
+}
+}
+
