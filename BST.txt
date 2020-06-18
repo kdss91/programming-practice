@@ -1,0 +1,204 @@
+import java.util.*;
+public class Practice {
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+	    Scanner scan = new Scanner(System.in);
+	    String str= scan.nextLine();
+	    String nums[]=str.split(" ");
+	    BinarySearchTree bst= new BinarySearchTree();
+	    for(int i=0; i<nums.length; ++i) {
+	    	bst.insert(Integer.parseInt(nums[i]));
+	    }
+	    System.out.println("Minimum." );
+	    System.out.println(bst.findMinimum(bst.root));
+	    System.out.println("Maximum." );
+	    System.out.println(bst.findMaximum());
+	    System.out.println("Preorder Traversal." );
+	    bst.printPreorder();
+	    System.out.println("Inorder Traversal." );
+	    bst.printInorder();
+	    System.out.println("Postorder Traversal." );
+	    bst.printPostorder();
+	    char c='y';
+	    do {
+	    	System.out.println("Enter node to delete. Press n to stop.");
+	    int del=scan.nextInt();
+	    bst.deleteRec(bst.root, del);
+	    System.out.println("Inorder traversal after deletion.");
+	    bst.printInorder();
+	    System.out.println("Enter y or n.");
+	    c = scan.next(".").charAt(0);
+	    } while(c=='y' || c=='Y');
+	    scan.close();
+	}
+}
+
+class Node1 {
+	  public int value;
+	  public Node1 left;
+	  public Node1 right;
+
+	  public Node1(int value) {
+	    this.value = value;
+	  }
+
+}
+
+class BinarySearchTree {
+	  public Node1 root;
+
+	  public void insert(int value){
+	    Node1 node = new Node1(value);
+
+	    if ( root == null ) {
+	      root = node;
+	      return;
+	    }
+
+	    insertRec(root, node);
+
+	  }
+
+	  private void insertRec(Node1 latestRoot, Node1 node){
+
+	    if ( latestRoot.value > node.value){
+
+	      if ( latestRoot.left == null ){
+	        latestRoot.left = node;
+	        return;
+	      }
+	      else{
+	        insertRec(latestRoot.left, node);
+	      }
+	    }
+	    else{
+	      if (latestRoot.right == null){
+	        latestRoot.right = node;
+	        return;
+	      }
+	      else{
+	        insertRec(latestRoot.right, node);
+	      }
+	    }
+	  }
+	  
+	  public int findMinimum(Node1 root){
+		  if ( root == null ){
+		    return 0;
+		  }
+		  Node1 currNode = root;
+		  while(currNode.left != null){
+		    currNode = currNode.left;
+		  }
+		  return currNode.value;
+		}
+
+		/**
+		 * Returns the maximum value in the Binary Search Tree
+		 */
+		public int findMaximum(){
+		  if ( root == null){
+		    return 0;
+		  }
+
+		  Node1 currNode = root;
+		  while(currNode.right != null){
+		    currNode = currNode.right;
+		  }
+		  return currNode.value;
+		}
+		
+		Node1 deleteRec(Node1 root, int key)
+	    {
+	        /* Base Case: If the tree is empty */
+	        if (root == null)  return root;
+	 
+	        /* Otherwise, recur down the tree */
+	        if (key < root.value)
+	            root.left = deleteRec(root.left, key);
+	        else if (key > root.value)
+	            root.right = deleteRec(root.right, key);
+	 
+	        // if key is same as root's key, then This is the node
+	        // to be deleted
+	        else
+	        {
+	            // node with only one child or no child
+	            if (root.left == null)
+	                return root.right;
+	            else if (root.right == null)
+	                return root.left;
+	 
+	            // node with two children: Get the inorder successor (smallest
+	            // in the right subtree)
+	            root.value = findMinimum(root.right);
+	 
+	            // Delete the inorder successor
+	            root.right = deleteRec(root.right, root.value);
+	        }
+	 
+	        return root;
+	    }
+		/**
+		 * Printing the contents of the tree in an inorder way.
+		 */
+		public void printInorder(){
+		  printInOrderRec(root);
+		  System.out.println("");
+		}
+
+		/**
+		 * Helper method to recursively print the contents in an inorder way
+		 */
+		private void printInOrderRec(Node1 currRoot){
+		  if ( currRoot == null ){
+		    return;
+		  }
+		  printInOrderRec(currRoot.left);
+		  System.out.print(currRoot.value+", ");
+		  printInOrderRec(currRoot.right);
+		}
+		
+		/**
+		 * Printing the contents of the tree in a Preorder way.
+		 */
+		public void printPreorder() {
+		  printPreOrderRec(root);
+		  System.out.println("");
+		}
+
+		/**
+		 * Helper method to recursively print the contents in a Preorder way
+		 */
+		private void printPreOrderRec(Node1 currRoot) {
+		  if (currRoot == null) {
+		    return;
+		  }
+		  System.out.print(currRoot.value + ", ");
+		  printPreOrderRec(currRoot.left);
+		  printPreOrderRec(currRoot.right);
+		}
+		
+		/**
+		 * Printing the contents of the tree in a Postorder way.
+		 */
+		public void printPostorder() {
+		  printPostOrderRec(root);
+		  System.out.println("");
+		}
+
+		/**
+		 * Helper method to recursively print the contents in a Postorder way
+		 */
+		private void printPostOrderRec(Node1 currRoot) {
+		  if (currRoot == null) {
+		    return;
+		  }
+		  printPostOrderRec(currRoot.left);
+		  printPostOrderRec(currRoot.right);
+		  System.out.print(currRoot.value + ", ");
+
+		}
+}
+
