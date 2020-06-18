@@ -1,0 +1,74 @@
+import java.util.*;
+public class Practice {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+	    Scanner scan = new Scanner(System.in);
+	    int num=Integer.parseInt(scan.nextLine());
+	    List <String> list = new ArrayList <String> ();
+	    for(int i=0; i<num; ++i) {
+	    	list.add(scan.nextLine());
+	    }
+	    Stack <Character> st = new Stack<Character>();
+	    System.out.println("");
+	    for(String s : list) {
+	    	char c[] = s.toCharArray();
+	    	boolean flag=false;
+	    	for(char ch : c) {
+	    		if(ch=='(' || ch=='[' || ch=='{') {
+	    			st.push(ch);
+	    		}
+	    		else if(ch==')') {
+	    			if(st.empty() || !st.peek().equals('(')) {
+	    				flag=true;
+	    				break;
+	    			}
+	    			st.pop();	
+	    		}
+	    		else if(ch==']') {
+	    			if(st.empty() || !st.peek().equals('[')) {
+	    				flag=true;
+	    				break;
+	    			}
+	    			st.pop();	
+	    		}
+	    		else if(ch=='}') {
+	    			if(st.empty() || !st.peek().equals('{')) {
+	    				flag=true;
+	    				break;
+	    			}
+	    			st.pop();	
+	    		}
+	    	}
+	    	if(flag) {
+	    		System.out.println("False");
+	    	}
+	    	else {
+	    		if (st.empty()) {
+	    		System.out.println("True");
+	    		}
+	    		else {
+	    			System.out.println("False");	
+	    		}
+	    	}
+	    	st.clear();
+	    }
+	    scan.close();
+	}
+}
+
+
+
+
+
+8
+(the[is]{valid})
+(the[is]{valid))
+{the(is[valid])}
+(this](is}{valid)
+{the(is[valid])}{]
+{the(is[valid])}(
+thisisvalid
+{(this)}
+
+
