@@ -1,0 +1,235 @@
+import java.util.*;
+public class Practice {
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+	    Scanner scan = new Scanner(System.in);
+	    int N=Integer.parseInt(scan.nextLine());
+	    Tree t =new Tree();
+	    int j=0;
+	    for(int i=0; i<N; ++i) {
+	    	String str[];
+	    	if(i==0) {
+	    	str=scan.nextLine().split(" ");
+	    	t.insert(str[0],str[1]);
+	    	}
+	    	else {
+	    	str=scan.nextLine().split(" ");
+	    	t.insertRec(str[0],str[1]);
+	    	}
+	    }
+	   int m=Integer.parseInt(scan.nextLine());
+	    List<String> list= new ArrayList <String> ();
+	    for(j=0; j<m; ++j) {
+	    	list.add(scan.nextLine());
+	    }
+	    for(j=0; j<m; ++j) {
+	    	String str[] = list.get(j).split(" ");
+	    	if(str[1].equals("child")){
+	    		Node1 tmp=t.search(str[2]);
+	    		if(tmp==null) {
+	    			System.out.print("F");
+	    			continue;
+	    		}
+	    		else {
+	    			if((tmp.left!=null && tmp.left.value.equalsIgnoreCase(str[0])) || (tmp.right!=null && tmp.right.value.equalsIgnoreCase(str[0]))) {
+	    				System.out.print("T");
+	    			}
+	    			else {
+	    				System.out.print("F");
+	    			}
+	    		}
+	    	}
+	    	
+	    	else if(str[1].equals("sibling")) {
+	    		Node1 parent=t.findParent(str[0]);
+	    		if(parent!=null) {
+	    			if(parent.left.value.equalsIgnoreCase(str[2]) || parent.right.value.equalsIgnoreCase(str[2])) {
+	    				System.out.print("T");
+	    				continue;
+	    			}
+	    		}
+	    		System.out.print("F");
+	    	}
+	    	
+	    	else if(str[1].equals("ancestor")) {
+	    		System.out.print((t.isAncestor(str[0], str[2]))?"T":"F");
+	    	}
+	    	
+	    	else if(str[1].equals("descendant")) {
+	    		System.out.print(t.isAncestor(str[2], str[0])?"T":"F");
+	    	}
+	    			
+	    }
+	    System.out.println("");
+	    //System.out.println("Preorder traversal of tree.");
+	    t.printPreOrder();
+	   // System.out.println("Inorder traversal of tree.");
+	  //  t.printInOrder();
+	  //  System.out.println("Postorder traversal of tree.");
+	  //  t.printPostOrder();
+	    //String findChild="Priyanka";
+	    //System.out.println("Searching parent of " + findChild + ": "+ t.findParent(findChild).value);
+	    scan.close();
+	}
+}
+
+class Node1{
+	String value;
+	Node1 left;
+	Node1 right;
+	Node1(String value){
+		this.value=value;
+	}
+}
+
+class Tree {
+	Node1 root;
+	
+	boolean isAncestor(String source, String target) {
+		if(source==null || target==null) {
+			return false;
+		}
+		if(search(source)==null || search(target)==null) {
+			return false;
+		}
+		return printAncestorsRec(search(source),target);
+	}
+	
+	boolean printAncestorsRec(Node1 node, String target) 
+    {
+         /* base cases */
+        if (node == null)
+            return false;
+  
+        if (node.value.equalsIgnoreCase(target))
+            return true;
+  
+        /* If target is present in either left or right subtree 
+           of this node, then print this node */
+        if (printAncestorsRec(node.left, target)
+                || printAncestorsRec(node.right, target)) 
+        {
+            //System.out.print(node.value + " ");
+            return true;
+        }
+  
+        /* Else return false */
+        return false;
+    }
+  
+	void insert(String parentRoot, String child) {
+		Node1 node=new Node1(parentRoot.trim());
+		if(root==null) {
+			root=node;
+		}
+		if(root.left==null) {
+			Node1 left=new Node1(child.trim());
+			root.left=left;
+		}
+	}
+	
+	void insertRec(String parent, String child) {
+		Node1 s=null;
+	    s=search(parent.trim());
+		if(s==null) {
+			return;
+		}
+		Node1 ch= new Node1(child.trim());
+		if(s.left==null) {
+			s.left=ch;
+		}
+		else {
+			s.right=ch;
+		}
+	}
+	Node1 findParent(String key) {
+		if(key==null || search(key)==null) {
+			return null;
+		}
+		if(root!=null) {
+			if (root.value.equalsIgnoreCase(key)) {
+				return null;
+			}
+		}
+		return findParentRec(root,key);
+	}
+	
+	Node1 findParentRec(Node1 latestRoot, String key) {
+		if(latestRoot!=null) {
+			if((latestRoot.left!=null && latestRoot.left.value.equalsIgnoreCase(key)) || (latestRoot.right!=null && latestRoot.right.value.equalsIgnoreCase(key))) {
+				return latestRoot;
+			}
+			else {
+				Node1 tmp=null;
+				tmp=findParentRec(latestRoot.left, key);
+				if(tmp!=null) {
+					return tmp;
+				}
+				return findParentRec(latestRoot.right,key);
+			}
+		}
+		return null;
+	}
+	Node1 search(String key) {
+		return search(root,key);
+	}
+	Node1 search(Node1 latestRoot, String key) {
+		if(latestRoot!=null) {
+		if(latestRoot.value.equalsIgnoreCase(key)) {
+			return latestRoot;
+		}
+		else {
+		    Node1 tmp = search(latestRoot.left,key);
+		    if(tmp!=null) {
+		    	return tmp;
+		    }
+		    return search(latestRoot.right,key);
+		}
+		}
+		return null;
+	}
+	
+	void printPreOrder() {
+		printPreOrderRec(root);
+		System.out.println("");
+	}
+	
+	void printPreOrderRec(Node1 root) {
+		if(root==null) {
+			return;
+		}
+		System.out.print(root.value + " ");
+		printPreOrderRec(root.left);
+		printPreOrderRec(root.right);
+	}
+	
+	void printInOrder() {
+		printInOrderRec(root);
+		System.out.println("");
+	}
+	
+	void printInOrderRec(Node1 root) {
+		if(root==null) {
+			return;
+		}
+		printPreOrderRec(root.left);
+		System.out.print(root.value + " ");
+		printPreOrderRec(root.right);
+	}
+	
+	void printPostOrder() {
+		printPostOrderRec(root);
+		System.out.println("");
+	}
+	
+	void printPostOrderRec(Node1 root) {
+		if(root==null) {
+			return;
+		}
+		printPreOrderRec(root.left);
+		printPreOrderRec(root.right);
+		System.out.print(root.value + " ");
+	}
+}
+
