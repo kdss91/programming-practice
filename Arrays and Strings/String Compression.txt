@@ -1,0 +1,35 @@
+import java.util.*;
+
+public class Practice {
+
+    public static void main(String args[]) {
+        System.out.println(compressed("ababababab"));
+        System.out.println(compressed("aabcccccaaa"));
+    }
+
+    static String compressed(String str) {
+        Queue<Character> queue = new LinkedList<>();
+        for(int i=0;i<str.length();++i){
+            queue.add(str.charAt(i));
+        }
+        String res = "";
+        while(!queue.isEmpty()) {
+            Character init = queue.poll();
+            int count = 1;
+            Character second;
+            while ((second = queue.peek()) == init) {
+                second = queue.poll();
+                ++count;
+            }
+            res += String.valueOf(init) + String.valueOf(count);
+        }
+
+        if(res.length()<str.length()){
+            return res;
+        }
+        return str;
+    }
+}
+
+
+

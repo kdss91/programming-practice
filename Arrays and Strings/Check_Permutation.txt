@@ -1,0 +1,34 @@
+public class Practice {
+
+    public static void main(String args[]) throws Exception{
+       String s1 = "ABC";
+       String s2 = "CAB";
+       System.out.println(checkPermutation(s1,s2));
+    }
+
+    static boolean checkPermutation(String str1, String str2){
+        if(str1.isEmpty() && str2.isEmpty()){
+            return true;
+        }
+        else if(str1.isEmpty() && !str2.isEmpty()){
+            return false;
+        }
+        else if(!str1.isEmpty() && str2.isEmpty()){
+            return false;
+        }
+        for(int i=0;i<str1.length();++i){
+            //System.out.println("str1["+ i + "]=" + str1.charAt(i));
+            int firstIndex = str2.indexOf(str1.charAt(i));
+            //System.out.println("Char found at pos " + firstIndex + " in str2");
+            if(firstIndex==-1){
+                return false;
+            }
+            str2 = str2.replaceFirst(String.valueOf(str1.charAt(i)),"");
+            //System.out.println("Current str2=" + str2);
+        }
+        if(!str2.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+}

@@ -1,0 +1,19 @@
+public class Practice {
+
+    public static void main(String args[]) throws Exception{
+       String s = "bar";
+       System.out.println(checkUnique(s));
+    }
+
+    static boolean checkUnique(String str){
+        if(str.isEmpty()){
+            return true;
+        }
+        for(int i=0;i<str.length();++i){
+            if(str.indexOf(str.charAt(i))!=i){
+                return false;
+            }
+        }
+        return true;
+    }
+}
