@@ -1,0 +1,78 @@
+import java.util.HashSet;
+import java.util.Set;
+
+class Node {
+    Node next = null;
+    int data;
+
+    public Node(int d){
+        data =d;
+    }
+}
+
+class MyLinkedList{
+    Node start;
+
+    public Node getStart() {
+        return start;
+    }
+
+    public MyLinkedList(Node start){
+        this.start = start;
+    }
+
+    void appendToTail(int i){
+        if(start == null){
+            start = new Node(i);
+        }
+        else {
+            Node newNode = new Node(i);
+            Node tmp = start;
+            while(tmp.next!=null){
+                tmp = tmp.next;
+            }
+            tmp.next = newNode;
+        }
+    }
+
+    void removeDuplicate(){
+        Set<Integer> my = new HashSet<>();
+        Node tmp1 = start;
+        Node tmp2 = start.next;
+        my.add(tmp1.data);
+        while(tmp2!=null){
+            if(!my.contains(tmp2.data)){
+                my.add(tmp2.data);
+                tmp1 = tmp2;
+                tmp2 = tmp2.next;
+            }
+            else{
+                   tmp1.next = tmp2.next;
+                   tmp2 = tmp2.next;
+            }
+        }
+    }
+}
+
+
+public class Practice {
+
+    public static void main(String args[]) {
+     Node node = new Node(1);
+     MyLinkedList myLinkedList = new MyLinkedList(node);
+     myLinkedList.appendToTail(1);
+     myLinkedList.appendToTail(2);
+     myLinkedList.appendToTail(2);
+     myLinkedList.appendToTail(3);
+     myLinkedList.appendToTail(4);
+     myLinkedList.appendToTail(1);
+     myLinkedList.removeDuplicate();
+     Node tmp = myLinkedList.getStart();
+     while(tmp!=null){
+         System.out.print(tmp.data + " -> ");
+         tmp = tmp.next;
+     }
+
+    }
+
+}
