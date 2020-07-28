@@ -1,0 +1,104 @@
+class Node{
+    int val;
+    Node next=null;
+    Node prev=null;
+    
+    Node(int val){
+        this.val = val;
+    }
+}
+
+class MyCircularQueue {
+    Node front=null;
+    Node rear=null;
+    int capacity=0;
+    int length=0;
+    
+    /** Initialize your data structure here. Set the size of the queue to be k. */
+    public MyCircularQueue(int k) {
+     this.capacity = k;   
+    }
+    
+    /** Insert an element into the circular queue. Return true if the operation is successful. */
+    public boolean enQueue(int value) {
+        if(length==capacity){
+            return false;
+        }
+        if(rear == null){
+            Node tmp = new Node(value);
+            tmp.next = tmp;
+            tmp.prev = tmp;
+            front = tmp;
+            rear = tmp;
+            ++length;
+        }
+        else {
+            Node tmp = new Node(value);
+            rear.next = tmp;
+            tmp.prev = rear;
+            tmp.next = front;
+            front.prev = tmp;
+            rear = tmp;
+            ++length;
+        }
+        return true;
+    }
+    
+    /** Delete an element from the circular queue. Return true if the operation is successful. */
+    public boolean deQueue() {
+        if(front==null){
+            return false;
+        }
+        if(length == 1){
+            front = null;
+            rear = null;
+            length = 0;
+            return true;
+        }
+        else {
+            Node tmp = front.next;
+            tmp.prev = rear;
+            rear.next = tmp;
+            front = tmp;
+            --length;
+            return true;
+        }
+    }
+    
+    /** Get the front item from the queue. */
+    public int Front() {
+        if(front!=null){
+            return front.val;
+        }
+        return -1;
+    }
+    
+    /** Get the last item from the queue. */
+    public int Rear() {
+        if(rear!=null){
+            return rear.val;
+        }
+        return -1;
+    }
+    
+    /** Checks whether the circular queue is empty or not. */
+    public boolean isEmpty() {
+        return front==null && rear==null;
+    }
+    
+    /** Checks whether the circular queue is full or not. */
+    public boolean isFull() {
+        return length==capacity?true:false;
+    }
+}
+
+/**
+ * Your MyCircularQueue object will be instantiated and called as such:
+ * MyCircularQueue obj = new MyCircularQueue(k);
+ * boolean param_1 = obj.enQueue(value);
+ * boolean param_2 = obj.deQueue();
+ * int param_3 = obj.Front();
+ * int param_4 = obj.Rear();
+ * boolean param_5 = obj.isEmpty();
+ * boolean param_6 = obj.isFull();
+ */
