@@ -1,0 +1,67 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Stack;
+
+public class DinnerPlates {
+    PriorityQueue<Integer> index = new PriorityQueue<>();
+    List<Stack<Integer>> myStacks = new ArrayList<>();
+    int capacity;
+
+    public DinnerPlates(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void push(int val) {
+        if(!index.isEmpty() && myStacks.size()>index.peek()){
+            int newIndex = index.peek();
+            myStacks.get(newIndex).push(val);
+            if(myStacks.get(newIndex).size() == capacity)
+                index.poll();
+        }
+        else {
+            Stack<Integer> st = new Stack<>();
+            st.push(val);
+            myStacks.add(st);
+            if(st.size()<capacity){
+                index.add(myStacks.size()-1);
+            }
+        }
+    }
+
+    private void removeFromMyStacks(int ind){
+        while(ind>=0 && ind==myStacks.size()-1 && myStacks.get(ind).isEmpty()){
+            myStacks.remove(ind);
+            if(index.contains(ind)){
+                index.remove(ind);
+            }
+            --ind;
+        }
+    }
+
+    private int popFromStackAtIndex(int ind){
+        if(ind<0 || ind>=myStacks.size()){
+            return -1;
+        }
+        Stack<Integer> st = myStacks.get(ind);
+        int result = -1;
+
+        if(!st.isEmpty()){
+            result = st.pop();
+            if(st.size()< capacity && !index.contains(ind)){
+                index.offer(ind);
+            }
+        }
+        removeFromMyStacks(ind);
+        return result;
+    }
+
+
+    public int pop() {
+        return popFromStackAtIndex(myStacks.size()-1);
+    }
+
+    public int popAtStack(int index) {
+        return popFromStackAtIndex(index);
+    }
+}
